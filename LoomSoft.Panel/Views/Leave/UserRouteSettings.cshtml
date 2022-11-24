@@ -1,0 +1,121 @@
+﻿@model List<UserRoute>
+@{
+    ViewData["Title"] = "Kullanıcı Rotaları";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    td{
+        text-align:center
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Kullanıcı Rotaları</h4>
+                    <a href="/Leave/AddUserRoute" type="button" class="btn btn-primary">Yeni Ekle</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example3" class="display" style="min-width: 845px">
+                            <thead>
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th>Rota İsmi</th>
+                                    <th>Kullanıcı</th>
+                                    <th>Rota Kodu</th>
+                                    <th>Rota Numarası</th>
+                                    <th>Rota Tipi</th>
+                                    <th>Detay</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var userRoute in Model)
+                                {
+                                    <tr>
+                                        <td><img class="rounded-circle" width="35" src="~/images/profile/small/pic1.jpg" alt=""></td>
+                                        <td name="name">@userRoute.Name</td>
+                                        <td name="userName">@userRoute.UserName</td>
+                                        <td name="routeCode">@userRoute.RouteCode</td>
+                                        <td name="routeNumber">@userRoute.RouteNumber</td>
+                                        @if (@userRoute.RouteType == 0)
+                                        {
+                                            <td name="routeType">İzin</td>
+                                        }
+                                        else
+                                        {
+                                            <td name="routeType">Mesai</td>
+                                        }
+                                        <td><a class="detail-btn btn btn-primary btn-xs" href="/Leave/UserRouteDetails/@userRoute.Id">Detaylar</a></td>
+                                        <td class="d-flex justify-content-start align-items-center gap-2">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input my-form-check-input btn-lg" onclick="activePasif(this)" value="@userRoute.Status" type="checkbox" id="@userRoute.Id">
+                                            </div>
+                                            <a href="#" class="btn btn-secondary shadow btn-xs p-3 d-flex justify-content-center align-items-center sharp"><i class="fas fa-pencil-alt"></i></a>
+                                            <a href="#" class="btn btn-danger shadow btn-xs p-3 d-flex justify-content-center align-items-center sharp" onclick="deleteUserRoute(this)"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        async function activePasif(that) {
+            var userRouteName = $(that).closest('tr').find("[name='name']").text();
+            var modelContent;
+            $(that).is(':checked') == true ?
+                modelContent = userRouteName + " isimli rotayı AKTİF etmek istediğinize emin misiniz?"
+                : modelContent = userRouteName + " isimli rotayı PASİF etmek istediğinize emin misiniz?";
+            var userRouteStatus = {
+                'userRouteId': $(that).attr('id'),
+                'status': 1,
+                'createdUserId': $(that).attr('id')
+            };
+            var response = await isActiveMethod(that, modelContent, userRouteStatus, "/Leave/UserRouteChangeStatus");
+            if (response?.isSuccess)
+            {
+                successMessageFunc(response);
+            }
+            else if (response?.isSuccess == false) {
+                var status = $(that).is(':checked') ? false : true;
+                $(that).prop("checked", status);
+                errorMessageFunc(response)
+            } else {
+                var status = $(that).is(':checked') ? false : true;
+                $(that).prop("checked", status);
+            }
+        }
+
+        async function deleteUserRoute(that) {
+            var userRouteName = $(that).closest('tr').find("[name='name']").text();
+            var modelContent = userRouteName + " isimli rotayı SİLMEK istediğinize emin misiniz?"
+            var userRouteDelete = {
+                'userRouteId': $(that).closest('tr').find("input").attr("id"),
+                'status': 99,
+                'updatedUserRouteId': $(that).closest('tr').find("input").attr("id")
+            };
+            var response = await deleteMethod(that, modelContent, userRouteDelete, "/Leave/UserRouteChangeStatus");
+            if (response.isSuccess) {
+                successMessageFunc(response);
+                $(that).closest('tr').fadeOut(500);
+            }
+            else
+                errorMessageFunc(response);
+        }
+
+    </script>
+}

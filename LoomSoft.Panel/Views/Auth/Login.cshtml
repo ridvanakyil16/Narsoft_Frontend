@@ -1,0 +1,207 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+@*<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LoomSoft.Panel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LoomSoft.Panel.styles.css" asp-append-version="true" />
+</head>*@
+<body>
+    <div class="authincation h-100">
+        <div class="container-fluid h-100">
+            <div class="row justify-content-end h-100 align-items-center">
+                <div class="col-xl-4 col-lg-5 col-md-7 col-sm-8">
+                    <div class="authincation-content">
+                        <div class="row no-gutters">
+                            <div class="col-xl-12">
+                                <div class="auth-form">
+                                    <div class="text-center mb-3">
+                                        <a href="/Auth/Login"><img src="~/images/narlogo.png" alt=""></a>
+                                    </div>
+                                    <form>
+                                        <div class="form">
+                                            @*<form id="l-login" method="post">*@
+                                            <div class="mb-3">
+                                                <label class="mb-1"><strong>Sicil Numarası / Mail Adresi</strong></label>
+                                                <input id="username" name="UserName" class="form-control" placeholder="Sicil Numarası veya Mail Adresi">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="mb-1"><strong>Şifre</strong></label>
+                                                <input id="password" type="password" name="Password" class="form-control" placeholder="Şifre">
+                                            </div>
+                                            @*    <div class="row d-flex justify-content-between mt-4 mb-2">
+                                            <div class="mb-3">
+                                            <a href="/User/ForgotPassword">Şifremi Unuttum</a>
+                                            </div>
+                                            </div>*@
+                                            <div id="company-field" class="field-wrapper input mb-2">
+                                            </div>
+
+                                            <div class="d-sm-flex justify-content-between">
+                                                <div class="field-wrapper">
+                                                    <button id="loginBton" type="submit" class="btn btn-primary" tabindex="3">Giriş</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="form">
+                                        <div class="d-sm-flex justify-content-between">
+                                            <div class="field-wrapper" id="companyDiv" hidden="hidden">
+                                                <button id="companySelectBton" class="btn btn-primary">Şirket Seç</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<script src="~/js/narsoftjs/userjs.js" asp-append-version="true"></script>*@
+
+    @section Scripts {
+        <script>
+            $(window).on("load", function (event) {
+                deletePreloaderMethod();
+            });
+
+
+            $("#loginBton").click(function (event) {
+                createPreloaderMethod();
+                event.preventDefault();
+                
+                var registrationNumber = $('#username').val();
+                var password = $('#password').val();
+
+                if (registrationNumber == '' || password == '') {
+
+                    //swal({
+                    //    title: 'Hata!',
+                    //    text: "Lütfen sicil numarası ve şifrenizi giriniz!",
+                    //    type: 'error',
+                    //    padding: '2em'
+                    //});
+                    return;
+                }
+
+                var request = JSON.stringify({
+                    'RegistrationNumber': registrationNumber,
+                    'Password': password
+                });
+                
+                $.ajax({
+                    async: false,
+                    url: "/Auth/LoginControl",
+                    data: request,
+                    contentType: "application/json",
+                    type: "POST",
+                    success: function (veriler) {
+
+                        if (veriler.aciklama == 'UserCompany') {
+                            htmltext = '';
+                            htmltext += '<select id="userCompany" class="form-control  basic">';
+                            htmltext += ' <option value="">Şirket Seçiniz</option>'
+                            for (var i = 0; i < veriler.user.data.userData.userCompanies.length; i++) {
+                                htmltext += ' <option data-userId="' + veriler.user.data.userData.id + '" value="' + veriler.user.data.userData.userCompanies[i].companyId + '">' + veriler.user.data.userData.userCompanies[i].companyName + '</option>'
+                            }
+                            htmltext += ' </select >';
+                            debugger
+                            $("#company-field").html(htmltext);
+                            $("#companyDiv").removeAttr('hidden');
+                            $("#loginBton").hide();
+                        }
+                        else {
+
+                            swal({
+                                title: 'Hata!',
+                                text: veriler.aciklama,
+                                type: 'error',
+                                padding: '2em'
+                            });
+                        }
+
+                    }, error: function (jqXHR, exception) {
+                        console.log(jqXHR);
+                        console.log(exception);
+                        swal({
+                            title: 'Hata!',
+                            text: "Bir hata oluştu!" + jqXHR.responseText,
+                            type: 'error',
+                            padding: '2em'
+                        });
+
+                    }
+
+                });
+                deletePreloaderMethod();
+            });
+            
+
+            $("#companySelectBton").click(function (event) {
+                event.preventDefault();
+                createPreloaderMethod();
+                var userId = $('#userCompany option:selected').attr('data-userId');
+                var companyId = $('#userCompany').val();
+                var registrationNumber = $('#username').val();
+                var password = $('#password').val();
+                if (companyId == '') {
+                    ErrorMessage('Tüm alanları doldurunuz.');
+                }
+                var request = JSON.stringify({
+                    'UserId': userId,
+                    'CompanyId': companyId,
+                    'RegistrationNumber':registrationNumber,
+                    'Password': password
+                });
+                console.log(request)
+                $.ajax({
+                    async: false,
+                    url: "/Auth/Login",
+                    data: request,
+                    contentType: "application/json",
+                    type: "POST",
+                    success: function (sonuc) {
+                        deletePreloaderMethod();
+                        console.log("1")
+                        console.log(sonuc)
+                        if (sonuc == "Ok") {
+                            window.location.href = "/Dashboard/Statistics";
+                        }
+                        else {
+
+                            swal({
+                                title: 'Hata!',
+                                text: 'Hata',
+                                type: 'error',
+                                padding: '2em'
+                            });
+                        }
+
+                    }
+                    , error: function (jqXHR, exception) {
+                        deletePreloaderMethod();
+                        console.log(jqXHR);
+                        console.log(exception);
+                        swal({
+                            title: 'Hata!',
+                            text: "Bir hata oluştu!" + jqXHR.responseText,
+                            type: 'error',
+                            padding: '2em'
+                        });
+
+                    }
+
+                });
+            });
+
+        </script>
+    }
+    </body>

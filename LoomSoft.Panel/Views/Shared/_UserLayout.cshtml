@@ -1,0 +1,59 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_UserLayout</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<link rel="shortcut icon" type="image/png" href="~/images/favicon.png" />
+	<link href="~/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+	<link href="~/css/style.css" rel="stylesheet">
+	<link href="~/css/loginstyle.css" rel="stylesheet">
+
+</head>
+<body class="vh-100">
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div class="myloader">
+        <div id="preloader">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+	@RenderBody()
+    <!-- Required vendors -->
+    <script src="~/vendor/global/global.min.js"></script>
+    <script src="~/vendor/lightgallery/js/lightgallery-all.min.js"></script>
+    <script src="~/vendor/chart.js/Chart.bundle.min.js"></script>
+    <script src="~/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="~/vendor/select2/js/select2.full.min.js"></script>
+    <script src="~/js/plugins-init/select2-init.js"></script>
+
+    <script>
+
+        function createPreloaderMethod() {
+            $(".myloader").append('<div id="preloader"><div class="lds-ripple"><div></div><div></div></div></div>');
+        }
+
+        function deletePreloaderMethod() {
+            jQuery('#preloader').remove();
+            $('#main-wrapper').addClass('show');
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,115 @@
+.search-job{
+	border-radius:1rem;
+	.search-dropdown{
+		position:relative;
+		 &:after{
+			content:"";
+			position:absolute;
+			top:0.375rem;
+			right:0;
+			width:0.125rem;
+			height:2rem;
+			background:#E2E2E2;
+		}
+		@include respond ('tab-port'){
+			&:nth-child(2){
+				&:after{
+					content:none;
+				}
+			}
+		}
+		@include respond ('phone'){
+			&:after{
+				content:none;
+			}
+		}
+	}
+	.job-title-search{
+		.search-area{
+			.input-group-text{
+				background:transparent;	
+				border:0;
+				padding:0;
+			}	
+			.form-control{
+				border:0;	
+			}
+		}
+	}
+}
+.jobs2{
+	border-radius:1.25rem;
+	transition: all 0.5s;
+	&:hover{
+		box-shadow: 0 15px 25px rgba(0,0,0,0.1);	
+		
+	}
+}
+.researcher{
+	height:3.8rem;
+}
+.block{
+	svg{
+		margin-top:-5.25rem;
+		position: relative;
+		z-index: 1;
+	}
+}
+.bg-blue{
+	background:#3772EA!important;	
+}
+.orange{
+	color:#F93A0B;	
+}
+.location{
+	margin-top:2rem;	
+	span{
+		i{
+			height:2.5rem;
+			width:2.5rem;
+			min-width:2.5rem;
+			border-radius:3.125rem;
+			background:$secondary;
+			color:$white;
+			line-height:2.5rem;
+			text-align:center;
+			margin-right:1rem;
+			font-size: 1.3rem;
+			
+		}	
+	}	
+}
+.pagination{
+	.page-indicator{
+		a{
+			border:1px solid var(--rgba-primary-1);	
+		}	
+	}	
+}
+.search-row .title{
+	font-size: 1.25rem;
+    font-weight: 600;	
+	.sub-title{
+		font-size: 1.125rem;	
+	}
+}
+.job-tabs{
+	.nav-tabs{
+		border:0;
+		.nav-item{
+			.nav-link{
+				border:0;	
+				background:transparent;
+				&.active{
+					i{	
+						color:var(--primary);
+						
+					}
+				}
+				i{
+					color:$black;	
+				}
+			}	
+		}
+	}	
+}

@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Kullanıcı Rolleri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Role> Roles = new List<Role>();
+    Roles = ViewBag.Roles;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h4 class="card-title">Kullanıcı</h4>
+                    </div>
+                    <form>
+                        <div class="d-flex align-items-center gap-3">
+                            <select id="single-select">
+                                <option selected="selected">Lütfen Kullanıcı Seçin..</option>
+
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.Id">@(user.Name + " " + user.Surname)</option>
+                                }
+                            </select>
+                            <button id="SorgulaBtn" class="btn btn-primary btn-sm w-25">Sorgula</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Kullanıcı Rolleri</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var userRole in ViewBag.Roles)
+                        {
+                            <div class="col-xl-3 col-lg-4 col-md-6">
+                                <div class="form-check custom-checkbox mb-3 checkbox-warning">
+                                    <input type="checkbox" onclick="changeRole(this)" class="form-check-input" id="@userRole.Id">
+                                    <label class="form-check-label" for="@userRole.Id">@userRole.Name</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $("#SorgulaBtn").click(function (event) {
+            event.preventDefault();
+            //$(".form-check-input")[0].checked = false;
+            const checkboxs = document.querySelectorAll(".form-check-input");
+            checkboxs.forEach(checkbox => {
+                console.log(checkbox, "ffff");
+                checkbox.checked = false;
+            });
+            var userId = $('#single-select').val();
+            $.ajax({
+                url: '/User/UserRolesByUserId?userId=' + userId,
+                type: 'POST',
+                dataType: 'json',
+
+                success: function (result) {
+                    if (result.isSuccess && result.data.userRoles.length > 0) {
+                        console.log("evt")
+                        result.data.userRoles.forEach(userRole => {
+                            $("#" + userRole.roleId)[0].checked = true;
+                        })
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function changeRole(that) {
+            var userName = $('#single-select option:selected').text();
+
+            if (userName != "Lütfen Kullanıcı Seçin..") {
+                var roleName = $(that).next().text();
+                var modelContent;
+                $(that).is(':checked') == true ?
+                    modelContent = userName + " kullanıcısına " + roleName + " rolünü eklemek istediğinize emin misiniz?"
+                    : modelContent = userName + " kullanıcısından " + roleName + " rolünü kaldırmak istediğinize emin misiniz?";
+                var addUserRole = {
+                    'name': userName+"-"+roleName,
+                    'userId': $('#single-select').val(),
+                    'userName': userName,
+                    'roleId': $(that).attr("id"),
+                    'roleName': roleName,
+                    'createdUserId': $('#single-select').val()
+                };
+                var deleteUserRole = {
+                    'userId': $('#single-select').val(),
+                    'roleId': $(that).attr("id"),
+                    'updatedUserId': $('#single-select').val()
+                };
+                $(that).is(':checked') == true ? isActiveMethod(that, modelContent, addUserRole, "/User/AddUserRole")
+                    : isActiveMethod(that, modelContent, deleteUserRole, "/User/DeleteUserRole")
+            }
+            else {
+                var modelContent = "Lütfen kullanıcı seçip ardından sorgula butonuna basınız.";
+                openModal("Transaaaction", modelContent);
+
+            }
+        }    
+
+    </script>
+}

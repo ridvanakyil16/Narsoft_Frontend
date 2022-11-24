@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Rol Yetkileri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Authority> Authorities = new List<Authority>();
+    Authorities = ViewBag.Authorities;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Rol Yetkileri</h4>
+                </div>
+                <div class="card-body">
+                    <div class="accordion accordion-primary-solid" id="roleAccordion">
+                        @foreach (var role in ViewBag.Roles as List<Role>)
+                        {
+                            <div class="accordion-item">
+                                <div class="accordion-header collapsed rounded-lg" id="@role.Id" data-bs-toggle="collapse" data-bs-target="#@role.Name.ToString().Trim().Replace(" ", string.Empty)" aria-controls="@role.Id" aria-expanded="true" role="button">
+                                    <span class="accordion-header-text">@role.Name</span>
+                                    <span class="accordion-header-indicator"></span>
+                                </div>
+                                <div id="@role.Name.ToString().Trim().Replace(" ", string.Empty)" class="collapse accordion__body" data-bs-parent="#roleAccordion">
+                                    <div class="accordion-body-text">
+                                        <div class="default-tab">
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" data-bs-toggle="tab" href="#web@(role.Id.ToString().Substring(0,5))"><i class="las la-desktop"></i> &nbsp; Web</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#mobil@(role.Id.ToString().Substring(0,5))"><i class="las la-mobile"></i> &nbsp; Mobil</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade show active" id="web@(role.Id.ToString().Substring(0,5))" role="tabpanel">
+                                                    <div class="pt-4">
+                                                        <div class="row">
+                                                            @foreach (var authority in Authorities.Where(x => x.Platform == 0).ToList())
+                                                            {
+                                                                <div class="col-xl-3 col-lg-4 col-md-6">
+                                                                    <div class="form-check custom-checkbox mb-3">
+                                                                        <input type="checkbox" class="form-check-input" onclick="changeRole(this)" value="@authority.Id" id="@authority.Id@role.Id.ToString().Substring(0,5)">
+                                                                        <label class="form-check-label" for="@authority.Id@role.Id.ToString().Substring(0,5)">@authority.Name</label>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="mobil@(role.Id.ToString().Substring(0,5))">
+                                                    <div class="pt-4">
+                                                        <div class="row">
+                                                            @foreach (var authority in Authorities.Where(x => x.Platform == 1).ToList())
+                                                            {
+                                                                <div class="col-xl-3 col-lg-4 col-md-6">
+                                                                    <div class="form-check custom-checkbox mb-3">
+                                                                        <input type="checkbox" class="form-check-input" onclick="changeRole(this)" value="@authority.Id" id="@authority.Id@role.Id.ToString().Substring(0,5)">
+                                                                        <label class="form-check-label" for="@authority.Id@role.Id.ToString().Substring(0,5)">@authority.Name</label>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(window).on("load", function (event) {
+            event.preventDefault();
+            const accordionHeaders = document.querySelectorAll(".accordion-header");
+            createPreloaderMethod();
+            unCheckedCheckbox();
+            accordionHeaders.forEach(accordionHeader => {
+                var roleId = accordionHeader.getAttribute("id");
+                $.ajax({
+                    url: '/User/RoleAuthorityByRoleId?roleId=' + roleId,
+                    type: 'POST',
+                    dataType: 'json',
+
+                    success: function (result) {
+                        if (result.isSuccess && result.data.roleAuthorities.length > 0) {
+                            result.data.roleAuthorities.forEach(roleAuthority => {
+                                $("#" + roleAuthority.authorityId + String(roleId).substring(0, 5))[0].checked = true;
+                            })
+                        }
+                    }
+                });
+            });
+            deletePreloaderMethod();
+        });
+    </script>
+
+    <script>
+
+        function changeRole(that) {
+            var roleName = $(that).closest('.accordion__body').prev(".accordion-header").children().first().text();
+            var id = $(that).closest('.accordion__body').prev(".accordion-header").attr("id");
+            var authorityName = $(that).next().text();
+            var content;
+            $(that).is(':checked') == true ?
+                content = roleName + " Rolüne " + $(that).next().text() + " yetkisini eklemek istediğinize emin misiniz?"
+                : content = roleName + " Rolünden " + $(that).next().text() + " yetkisini kaldırmak istediğinize emin misiniz? ";
+            var roleAuthority = {
+                'name': roleName + "-" + authorityName,
+                'roleName': roleName,
+                'roleId': id,
+                'authorityName': authorityName,
+                'authorityId': $(that).val()
+            };
+            var response = await isActiveMethod(that, content, roleAuthority, $(that).is(':checked') ? '/User/AddRoleAuthority' : '/User/DeleteRoleAuthority');
+            if (response?.isSuccess)
+                successMessageFunc(response);
+            else if (response?.isSuccess == false) {
+                var status = $(that).is(':checked') ? false : true;
+                $(that).prop("checked", status);
+                errorMessageFunc(response)
+            } else {
+                var status = $(that).is(':checked') ? false : true;
+                $(that).prop("checked", status);
+            }
+        }
+
+    </script>
+}

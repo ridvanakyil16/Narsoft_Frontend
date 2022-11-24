@@ -1,0 +1,173 @@
+﻿@model List<Authority>
+@{
+    ViewData["Title"] = "AuthorityAdd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- row -->
+    <div class="row">
+        <div class="col-xl-6 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Yetki Ekle</h4>
+                </div>
+                <div class="card-body">
+                    <div class="basic-form">
+                        <div class="mb-3 row">
+                            <label class="col-lg-3 col-form-label" for="yetkiAdi">
+                                Yetki Adı
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="text" name="Name" class="form-control" id="yetkiAdi" placeholder="Yetki Adı giriniz.." required>
+                                <div class="invalid-feedback">
+                                    Lütfen yetki adı giriniz..
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-lg-3 col-form-label" for="platform">
+                                Platform
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="col-lg-9">
+                                <select id="platform" class="default-select wide form-control" name="Platform" required>
+                                    <option value="0">Web Sitesi</option>
+                                    <option value="1">Mobil</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Lütfen platform seçiniz..
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-lg-3 col-form-label" for="yetkiTipi">
+                                Yetki Tipi
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="col-lg-9">
+                                <select id="yetkiTipi" class="default-select wide form-control" name="AuthorityType" required>
+                                    <option value="0">Menü</option>
+                                    <option value="1">Sayfa</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Lütfen yetki tipi seçiniz..
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-lg-3 col-form-label" for="ustYetki">
+                                Üst Yetki
+                                <span class="text-danger"></span>
+                            </label>
+                            <div class="col-lg-9">
+                                <select id="ustYetki" class="default-select wide form-control" name="MainAuthorityId">
+                                    <option data-display="Lütfen Seçiniz">Lütfen Seçiniz</option>
+                                    @foreach (var authority in Model)
+                                    {
+                                        <option value="@authority.Id">@authority.Name</option>
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    Lütfen üst yetki seçiniz..
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-lg-3 col-form-label" for="derinlikSeviyesi">
+                                Derinlik Seviyesi
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="number" name="DepthLevel" class="form-control" id="derinlikSeviyesi" placeholder="Derinlik seviyesi giriniz.." required>
+                                <div class="invalid-feedback">
+                                    Lütfen derinlik seviyesi giriniz.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-lg-3 col-form-label" for="siteLink">
+                                Link <span class="text-danger"></span>
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="text" name="Link" class="form-control" id="siteLink" placeholder="Link giriniz..">
+                                <div class="invalid-feedback">
+                                    Lütfen link giriniz..
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-lg-3 col-form-label" for="tabIndex">
+                                İndeks <span class="text-danger">*</span>
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="number" name="TabIndex" class="form-control" id="tabIndex" placeholder="İndeks giriniz.." required>
+                                <div class="invalid-feedback">
+                                    Lütfen indeks giriniz..
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-lg-3 col-form-label" for="menuIcon">
+                                İkon
+                                <span class="text-danger"></span>
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="text" name="MenuIcon" class="form-control" id="menuIcon" placeholder="İkon giriniz..">
+                                <div class="invalid-feedback">
+                                    Lütfen İkon giriniz..
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="col-lg-12 d-flex justify-content-end gap-5">
+                                <a href="/User/Authorities" class="btn btn-danger px-5">Vazgeç</a>
+                                <button onclick="addMethod()" class="btn btn-primary px-5">Oluştur</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        async function addMethod() {
+            var name = $("[name='Name']").val();
+            var platform = $("[name='Platform']").val();
+            var authorityType = $("[name='AuthorityType']").val();
+            var mainAuthorityId = $("[name='MainAuthorityId']").val();
+            var mainAuthorityName = $("#ustYetki option:selected").text();
+            var depthLevel = $("[name='DepthLevel']").val();
+            var link = $("[name='Link']").val();
+            var tabIndex = $("[name='TabIndex']").val();
+            var menuIcon = $("[name='MenuIcon']").val();
+
+            var roleAdd = {
+                'name': name,
+                'platform': platform,
+                'authorityType': authorityType,
+                'mainAuthorityId': mainAuthorityId,
+                'mainAuthorityName': mainAuthorityName == "Lütfen Seçiniz" ? null : mainAuthorityName,
+                'depthLevel': depthLevel,
+                'link': link,
+                'tabIndex': tabIndex,
+                'menuIcon': menuIcon
+            };
+            var response = await ajaxMethod('/User/AuthorityAdd', roleAdd, 'POST', 'Json', successMessageFunc, errorMessageFunc);
+            if (response?.isSuccess) {
+                successMessageFunc(response);
+                setTimeout(() => {
+                    location.href = "/User/Authorities";
+                }, 2000);
+            } else {
+                errorMessageFunc(response);
+            }
+        }
+
+    </script>
+}

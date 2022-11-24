@@ -1,0 +1,113 @@
+﻿@model LoomSoft.Panel.CQRS.Queries.Responses.DepartmentsGetByCompanyIdQueryResponse
+@{
+    ViewData["Title"] = "Birimler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Birimler</h4>
+                    <a href="/User/DepartmentAdd" type="button" class="btn btn-primary">Yeni Ekle</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example3" class="display" style="min-width: 845px">
+                            <thead>
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th>Ad</th>
+                                    <th>Kod</th>
+                                    <th>Oluşturma Tarihi</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var department in Model.Departments)
+                                {
+                                    <tr>
+                                        <td><img class="rounded-circle" width="35" src="~/images/profile/small/pic1.jpg" alt=""></td>
+                                        <td name="departmentName">@department.Name</td>
+                                        <td>@department.Code</td>
+                                        <td>@department.CreatedOn</td>
+                                        <td class="d-flex justify-content-start align-items-center gap-2">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input my-form-check-input btn-lg" onclick="activePasif(this)" value="@department.Status" type="checkbox" id="@department.Id">
+                                            </div>
+                                            <a href="#" class="btn btn-secondary shadow btn-xs p-3 d-flex justify-content-center align-items-center sharp"><i class="fas fa-pencil-alt"></i></a>
+                                            <a href="#" class="btn btn-danger shadow btn-xs p-3 d-flex justify-content-center align-items-center sharp" onclick="deletedepartment(this)"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @*<script>
+        $(window).on("load", function (event) {
+            event.preventDefault();
+            const statusButtons = document.querySelectorAll(".form-check-input");
+            statusButtons.forEach(checkbox => {
+                //console.log(checkbox.value,"ne")
+                checkbox.value == 1 ? checkbox.checked = true : checkbox.checked = false
+            });
+        });
+    </script>*@
+
+
+    <script>
+
+        async function activePasif(that) {
+            var departmentName = $(that).closest('tr').find("[name='departmentName']").text();
+            var modelContent;
+            $(that).is(':checked') == true ?
+                modelContent = departmentName + " birimini AKTİF etmek istediğinize emin misiniz?"
+                : modelContent = departmentName + " birimini PASİF etmek istediğinize emin misiniz?";
+            var departmentStatus = {
+                'departmentId': $(that).attr('id'),
+                'status': 1,
+                'updatedUserId': $(that).attr('id')
+            };
+            var response = await isActiveMethod(that, modelContent, departmentStatus, "/User/DepartmentChangeStatus");
+            if (response?.isSuccess)
+                successMessageFunc(response);
+            else if (response?.isSuccess == false) {
+                var status = $(that).is(':checked') ? false : true;
+                $(that).prop("checked", status);
+                errorMessageFunc(response)
+            } else {
+                var status = $(that).is(':checked') ? false : true;
+                $(that).prop("checked", status);
+            }
+        }
+
+        async function deletedepartment(that) {
+            var departmentName = $(that).closest('tr').find("[name='departmentName']").text();
+            var modelContent = departmentName + " birimini SİLMEK istediğinize emin misiniz?"
+            var departmentDelete = {
+                'departmentId': $(that).closest('tr').find("input").attr("id"),
+                'status': 99,
+                'updatedUserId': $(that).closest('tr').find("input").attr("id")
+            };
+            var response = await deleteMethod(that, modelContent, departmentDelete, "/User/DepartmentChangeStatus");
+            if (response.isSuccess) {
+                successMessageFunc(response);
+                $(that).closest('tr').fadeOut(500);
+            }
+            else
+                errorMessageFunc(response);
+        }
+
+    </script>
+
+
+}

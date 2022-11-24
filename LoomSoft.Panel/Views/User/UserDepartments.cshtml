@@ -1,0 +1,176 @@
+﻿@{
+    ViewData["Title"] = "Kullanıcı Birimleri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Department> Departments = new List<Department>();
+    Departments = ViewBag.Departments;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h4 class="card-title">Kullanıcı</h4>
+                    </div>
+                    <form>
+                        <div class="d-flex align-items-center gap-3">
+                            <select id="single-select">
+                                <option selected="selected">Lütfen Kullanıcı Seçin..</option>
+
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.Id">@(user.Name + " " + user.Surname)</option>
+                                }
+                            </select>
+                            <button id="SorgulaBtn" class="btn btn-primary btn-sm w-25">Sorgula</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Kullanıcı Birimleri</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var department in ViewBag.Departments)
+                        {
+                            <div class="col-xl-3 col-lg-4 col-md-6">
+                                <div class="form-check custom-checkbox mb-3 checkbox-warning">
+                                    <input type="checkbox" onclick="changeDepartment(this)" class="form-check-input" id="@department.Id">
+                                    <label class="form-check-label" for="@department.Id">@department.Name</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $("#SorgulaBtn").click(function (event) {
+            event.preventDefault();
+            //$(".form-check-input")[0].checked = false;
+            const checkboxs = document.querySelectorAll(".form-check-input");
+            checkboxs.forEach(checkbox => {
+                console.log(checkbox, "ffff");
+                checkbox.checked = false;
+            });
+            var userId = $('#single-select').val();
+            $.ajax({
+                url: '/User/UserDepartmentsByUserId?userId=' + userId,
+                type: 'POST',
+                dataType: 'json',
+
+                success: function (result) {
+                    if (result.isSuccess && result.data.userDepartments.length > 0) {
+                        console.log("evt")
+                        result.data.userDepartments.forEach(userDepartment => {
+                            $("#" + userDepartment.departmentId)[0].checked = true;
+                        })
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function changeDepartment(that) {
+            var userName = $('#single-select option:selected').text();
+
+            if (userName != "Lütfen Kullanıcı Seçin..") {
+                var departmentName = $(that).next().text();
+                var modelContent;
+                $(that).is(':checked') == true ?
+                    modelContent = userName + " kullanıcısına " + departmentName + " birim yetkisi vermek istediğinize emin misiniz?"
+                    : modelContent = userName + " kullanıcısından " + departmentName + " birim yetkisini kaldırmak istediğinize emin misiniz?";
+                var adduserDepartment = {
+                    'name': userName + "-" +departmentName,
+                    'userId': $('#single-select').val(),
+                    'userName': userName,
+                    'departmentId': $(that).attr("id"),
+                    'departmentName': departmentName,
+                    'createdUserId': $('#single-select').val()
+                };
+                var deleteuserDepartment = {
+                    'userId': $('#single-select').val(),
+                    'departmentId': $(that).attr("id"),
+                    'updatedUserId': $('#single-select').val()
+                };
+                $(that).is(':checked') == true ? isActiveMethod(that, modelContent, adduserDepartment, "/User/AddUserDepartment")
+                    : isActiveMethod(that, modelContent, deleteuserDepartment, "/User/DeleteUserDepartment")
+            }
+            else {
+                var modelContent = "Lütfen kullanıcı seçip ardından sorgula butonuna basınız.";
+                openModal("Transaaaction", modelContent);
+
+            }
+        }
+                //function changeRole(that) {
+                //    $('#exampleModalCenter').modal('show');
+                //    var modelText = $("#exampleModalCenter .modal-body p");
+                //    if ($('#single-select option:selected').text() != "Lütfen Seçin") {
+                //        var userName = $('#single-select option:selected').text();
+                //        $(that).is(':checked') == true ? modelText.text(userName + " Kullanıcısına " + $(that).next().text() + " birimini eklemek istediğinizden emin misiniz? ")
+                //            : modelText.text(userName + " Kullanıcısından " + $(that).next().text() + " birimini kaldırmak istediğinizden emin misiniz? ");
+                //        modelText.parent().next().find("button").removeClass("d-none");
+                //        modelText.parent().next().children().last().addClass("d-none")
+                //        $("#no").on("click", function () {
+                //            $('#exampleModalCenter').modal('hide');
+                //            var status = $(that).is(':checked') ? false : true;
+                //            $(that).prop("checked", status)
+                //            that = null;
+                //        });
+                //        $("#yes").click(function () {
+                //            var adduserDepartment = {
+                //                'name': "string",
+                //                'userId': $('#single-select').val(),
+                //                'userName': "string",
+                //                'departmentId': $(that).attr("id"),
+                //                'departmentName': "string",
+                //                'createdUserId': $('#single-select').val()
+                //            };
+                //            var deleteuserDepartment = {
+                //                'userId': $('#single-select').val(),
+                //                'departmentId': $(that).attr("id"),
+                //                'updatedUserId': $('#single-select').val()
+                //            };
+                //            $.ajax({
+                //                url: $(that).is(':checked') ? '/User/AdduserDepartment' : '/User/DeleteuserDepartment',
+                //                data: $(that).is(':checked') ? adduserDepartment : deleteuserDepartment,
+                //                type: 'POST',
+                //                dataType: 'json',
+
+                //                success: function (result) {
+                //                    if (result.isSuccess) {
+                //                        alertBox("right", "top", "success", "", "")
+                //                    }
+                //                },
+                //                error: function (result) {
+                //                    if (!result.isSuccess) {
+                //                        alertBox("right", "top", "error", "", "");
+                //                    }
+                //                }
+                //            });
+                //            that = null;
+                //            $('#exampleModalCenter').modal('hide');
+                //        });
+                //    } else {
+                //        modelText.text("Lütfen kullanıcı seçip ardından sorgula butonuna basın.")
+                //        modelText.parent().next().find("button").addClass("d-none");
+                //        modelText.parent().next().children().last().removeClass("d-none").click(function () {
+                //            $('#exampleModalCenter').modal('hide');
+                //        });
+                //    }
+                //}
+
+    </script>
+}

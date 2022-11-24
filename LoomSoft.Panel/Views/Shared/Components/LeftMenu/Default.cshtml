@@ -1,0 +1,27 @@
+﻿@using LoomSoft.Panel.Models
+
+<ul class="metismenu" id="menu">
+    @if(ViewBag.mainMenuList !=null && ViewBag.mainMenuList.Count>0)
+    {
+    @foreach (var _authority in ViewBag.mainMenuList as List<Authority>)
+    {
+
+        <li>
+            <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                <i class="@_authority.MenuIcon"></i>
+                <span class="nav-text">@_authority.Name</span>
+            </a>
+
+            <ul aria-expanded="false">
+                
+                @foreach (var menu in _authority.SubAuthorities as List<Authority>)
+                {
+                    <li><a href="@menu.Link">@menu.Name</a></li>
+                }
+                
+            </ul>
+        </li>
+
+    }
+    }
+</ul>

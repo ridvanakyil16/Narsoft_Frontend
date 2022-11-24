@@ -1,0 +1,193 @@
+﻿@{
+    ViewData["Title"] = "Kullanıcı Oluştur";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Kullanıcı Oluştur</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-validation">
+                        <div class="row">
+                                <div class="col-xl-6">
+                                    <label class="col-lg-4 col-form-label" for="PhotoString">
+                                        Fotoğraf
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="mb-5 d-flex justify-content-center">
+                                        <div class="container-img mb-5 d-flex justify-content-center position-relative">
+
+                                            <a href onclick="document.getElementById('upload').click(); return false"
+                                               id="cameraModelOpen" style="width:150px; height: 150px"
+                                               class="btn btn-primary light me-1 rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
+                                                <img src="" style="width:150px; height:150px; object-fit: cover" class="d-none" />
+                                                <i class="fa fa-camera m-0 fs-1"></i>
+                                            </a>
+
+                                            <input id="upload" onchange="imagePreview(event)" type="file" class="d-none" />
+
+                                            <i id="deleteImageButton" onclick="deleteImage()" style="position: absolute; top: 10%; right: 10%; font-size: 25px; cursor: pointer;" class="fa fa-minus-circle text-danger" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="RegistrationNumber">
+                                            Sicil No
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="text" name="RegistrationNumber" class="form-control" id="RegistrationNumber" placeholder="Sicil numarası giriniz.." required>
+                                            <div class="invalid-feedback">
+                                                Lütfen Sicil Numarası Giriniz.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="ad">
+                                            Ad
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="text" name="Name" class="form-control" id="ad" placeholder="Ad giriniz.." required>
+                                            <div class="invalid-feedback">
+                                                Lütfen ad giriniz.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="soyad">
+                                            Soyad
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="text" name="Surname" class="form-control" id="soyad" placeholder="Soyad giriniz.." required>
+                                            <div class="invalid-feedback">
+                                                Lütfen soyad giriniz.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="MailAddress">
+                                            E-Mail <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="email" name="MailAddress" class="form-control" id="MailAddress" placeholder="Mail adresi giriniz.." required>
+                                            <div class="invalid-feedback">
+                                                Lütfen mail adresi giriniz.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="telefon">
+                                            Telefon
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="text" name="PhoneNumber" class="form-control" id="telefon" placeholder="Telefon numarası giriniz.." required>
+                                            <div class="invalid-feedback">
+                                                Lütfen telefon numarası giriniz.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="telefon">
+                                            Seviye
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="number" name="UserLevel" class="form-control" id="UserLevel" placeholder="Seviye giriniz.. (1-5)" required>
+                                            <div class="invalid-feedback">
+                                                Lütfen 1 ile 5 arasında seviye giriniz.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="address">
+                                            Adres
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="text" name="Address" class="form-control" id="Address" placeholder="Adres giriniz.." required>
+                                            <div class="invalid-feedback">
+                                                Lütfen adres giriniz.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col-lg-12 d-flex justify-content-center gap-5">
+                                            <a href="/User/Users" class="btn btn-danger px-5">Vazgeç</a>
+                                            <button onclick="addMethod()" class="btn btn-primary px-5">Oluştur</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let photoResult;
+
+        async function imagePreview(e) {
+            photoResult = await uploadImage(e.target.files[0])
+            $("#cameraModelOpen i").addClass("d-none");
+            $("#cameraModelOpen img").removeClass("d-none");
+            $("#cameraModelOpen img").attr("src", photoResult.data);
+            $("#deleteImageButton").removeClass("d-none");
+            $("#upload").prop("value", "");
+        };
+
+        function deleteImage() {
+            $("#cameraModelOpen i").removeClass("d-none");
+            $("#cameraModelOpen img").addClass("d-none");
+            $("#cameraModelOpen img").attr("src", "");
+            $("#deleteImageButton").addClass("d-none");
+        }
+
+        async function addMethod() {
+            var registrationNumber = $("[name='RegistrationNumber']").val();
+            var name = $("[name='Name']").val();
+            var surname = $("[name='Surname']").val();
+            var mailAddress = $("[name='MailAddress']").val();
+            var phoneNumber = $("[name='PhoneNumber']").val();
+            var userLevel = $("[name='UserLevel']").val();
+            var address = $("[name='Address']").val();
+            var photoName = photoResult?.fileName;
+            var photoString = photoResult?.data;
+
+            var userAdd = {
+                'registrationNumber': registrationNumber,
+                'name': name,
+                'surname': surname,
+                'mailAddress': mailAddress,
+                'phoneNumber': phoneNumber,
+                'userLevel': userLevel,
+                'address': address,
+                'photoName': photoName,
+                'photoString': photoString,
+                'createdUserId': '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+            };
+
+            var response = await ajaxMethod('/User/UserAdd', userAdd, 'POST', 'Json');
+            if (response?.isSuccess) {
+                successMessageFunc(response);
+                setTimeout(() => {
+                    location.href = "/User/Users";
+                }, 2000);
+            } else {
+                errorMessageFunc(response);
+            }
+        }
+
+    </script>
+}

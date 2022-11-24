@@ -1,0 +1,322 @@
+﻿@{
+    ViewData["Title"] = "Rota İzin Tanımlama";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Rota İzin Tanımlama</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-validation">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class=" row mb-3">
+                                    <label class="col-lg-3 col-form-label" for="izinTipi">
+                                        İzin Tipi
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select id="izinTipi" name="TimeType" required class="default-select wide form-control" onchange="SelectChange(this)">
+                                            <option value="-1">Seçiniz</option>
+                                            <option value="0">Günlük İzin</option>
+                                            <option value="1">Saatlik İzin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-3 col-form-label" for="izinNedeni">
+                                        İzin Nedeni
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select id="izinNedeni" name="LeaveType" class="default-select wide form-control" required>
+                                            <option selected="selected">Lütfen İzin Nedeni Seçiniz..</option>
+
+                                            <option value="0">Babalık İzni</option>
+                                            <option value="1">Ölüm İzni</option>
+                                            <option value="2">Yıllık İzni</option>
+                                            <option value="3">Parasız  İzni</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Lütfen izin nedeni seçiniz..
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-3 col-form-label" for="izinSebebi">
+                                        İzin Sebebi
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <textarea type="text" name="Reason" class="form-control" id="izinSebebi" placeholder="İzin Sebebi" maxlength="250"></textarea>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Lütfen izin sebebini giriniz.
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-3 col-form-label" for="izinAciklamasi">
+                                        İzin Açıklaması
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <textarea type="text" name="Note" class="form-control" id="izinAciklamasi" placeholder="İzin Açıklaması" maxlength="250"></textarea>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Lütfen izin açıklamasını giriniz.
+                                    </div>
+                                </div>
+                                @*<div class=" row mb-3">
+                                <label class="col-lg-3 col-form-label" for="leaveTimeType">
+                                İzin Tipi
+                                <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-lg-6">
+                                <select id="SelectLeaveReason" required class="default-select wide form-control" onchange="SelectChange(this)">
+                                <option value="-1">Seçiniz</option>
+                                <option value="0">Günlük İzin</option>
+                                <option value="1">Saatlik İzin</option>
+                                </select>
+                                </div>
+
+                                </div>*@
+                                <div class="mb-3 row dailyReasonDiv">
+                                    <label class="col-lg-3 col-form-label"></label>
+                                    <div class="col-lg-9">
+                                        <div class="row">
+                                            <div class="col">
+                                                <input name="StartDate" id="basicFlatpickrStartTime" value="" class="form-control flatpickr flatpickr-input active" type="text" placeholder="başlangıç tarihi" required>
+                                            </div>
+                                            <div class="col">
+                                                <input name="EndDate" id="basicFlatpickrEndTime" value="" class="form-control flatpickr flatpickr-input active" type="text" placeholder="bitiş tarihi" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row hourlyReasonDiv">
+                                    <label class="col-lg-3 col-form-label">
+                                        İzin Aralığı
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <div class="col-lg-9">
+                                        <select name="RangeType" class="placeholder js-states form-control" id="period" onchange="HourlyReasonChange(this)" required>
+                                            <option value="-1">Seçiniz...</option>
+                                            <option value="0">Süre Aralığı</option>
+                                            <option value="1">Toplam Süre</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row hourlyReasonDiv">
+                                    <label class="col-lg-3 col-form-label"></label>
+                                    <div class="col-lg-9">
+                                        <div class="row">
+                                            <div class="col">
+                                                <input name="StartTime" id="basicFlatpickrStartHour" value="" class="form-control flatpickr flatpickr-input active" type="text" placeholder="başlangıç saati" required>
+                                            </div>
+                                            <div class="col">
+                                                <input name="EndTime" id="basicFlatpickrEndHour" value="" class="form-control flatpickr flatpickr-input active" type="text" placeholder="bitiş saati" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col-lg-12 d-flex justify-content-end gap-5">
+                                        <a href="/Leave/UserRouteSettings" class="btn btn-danger px-5">Vazgeç</a>
+                                        <button onclick="addMethod()" class="btn btn-primary px-5">Oluştur</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+@section Scripts {
+    <script>
+        jQuery(window).on('load', function () {
+			SelectChange($('#izinTipi')[0])
+		});
+
+        //function CreateLeave(){
+        //    debugger
+        //    var leaveType = $('#leaveType option:selected').val();
+        //    var selectLeaveReason = $('#SelectLeaveReason option:selected').val();
+        //    var baslangicTarihi = document.getElementById("basicFlatpickrStartTime").value;
+        //    var bitisTarihi = document.getElementById("basicFlatpickrEndTime").value;
+        //    var izinTarihi = document.getElementById("basicFlatpickrReasonDate").value;
+        //    var izinAraligi = $('#period option:selected').val();
+        //    var baslangicSaati = document.getElementById("basicFlatpickrStartHour").value;
+        //    var bitisSaati = document.getElementById("basicFlatpickrEndHour").value;
+
+        //    if (leaveType < 0 || selectLeaveReason < 0) {
+        //        infoModal("Lütfen tüm seçimleri yapınız.");
+        //    }
+        //    else if (selectLeaveReason == 0 && (baslangicTarihi == '' || bitisTarihi =='')) {
+        //        infoModal("Lütfen tüm seçimleri yapınız.");
+        //    }
+        //    else if (selectLeaveReason == 1 && (izinTarihi == '' || izinAraligi<0) {
+        //        infoModal("Lütfen tüm seçimleri yapınız.");
+        //    }
+        //}
+        //}
+
+        $(document).ready(function () {
+            var f1 = flatpickr(document.getElementById('basicFlatpickrStartTime'),
+                {
+                    enableTime: false,
+                    dateFormat: "d-m-Y",
+                    locale: {
+                        weekdays: {
+                            longhand: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+                            shorthand: ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt']
+                        },
+                        months: {
+                            longhand: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+                            shorthand: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
+                        },
+                        today: 'Bugün',
+                        clear: 'Temizle'
+                    }
+                });
+            var f2 = flatpickr(document.getElementById('basicFlatpickrEndTime'),
+                {
+                    enableTime: false,
+                    dateFormat: "d-m-Y",
+                    locale: {
+                        weekdays: {
+                            longhand: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+                            shorthand: ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt']
+                        },
+                        months: {
+                            longhand: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+                            shorthand: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
+                        },
+                        today: 'Bugün',
+                        clear: 'Temizle'
+                    }
+                });
+            //var f3 = flatpickr(document.getElementById('basicFlatpickrReasonDate'),
+            //    {
+            //        enableTime: false,
+            //        dateFormat: "d-m-Y",
+            //        locale: {
+            //            weekdays: {
+            //                longhand: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+            //                shorthand: ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt']
+            //            },
+            //            months: {
+            //                longhand: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+            //                shorthand: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
+            //            },
+            //            today: 'Bugün',
+            //            clear: 'Temizle'
+            //        }
+            //    });
+            var f4 = flatpickr(document.getElementById('basicFlatpickrStartHour'),
+                {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    clear: 'Temizle'
+                });
+            var f5 = flatpickr(document.getElementById('basicFlatpickrEndHour'),
+                {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    clear: 'Temizle',
+                });
+        });
+
+    </script>
+    <script>
+        function SelectChange(element) {
+            leaveReason = element.value;
+            if (leaveReason == 0) {
+                $(".hourlyReasonDiv").hide();
+                $(".dailyReasonDiv").show();
+                $(".dailyReasonDiv #basicFlatpickrEndTime").show();
+            }
+            else if (leaveReason == -1) {
+                $(".hourlyReasonDiv").hide();
+                $(".dailyReasonDiv").hide();
+            }
+            else if (leaveReason == 1) {
+                $(".dailyReasonDiv").show();
+                $(".dailyReasonDiv #basicFlatpickrEndTime").hide();
+                $(".hourlyReasonDiv").show();
+            }
+            else {
+                $(".dailyReasonDiv").show();
+                $(".hourlyReasonDiv").show();
+            }
+        }
+
+        function HourlyReasonChange(element) {
+            select = element.value;
+            if (select == 0) {
+                document.getElementById("basicFlatpickrEndHour").removeAttribute('disabled');
+                document.getElementById("basicFlatpickrStartHour").removeAttribute('disabled');
+            }
+            else if (select == -1) {
+
+            }
+            else if (select == 1) {
+                document.getElementById("basicFlatpickrEndHour").setAttribute("disabled", "disabled");
+                document.getElementById("basicFlatpickrStartHour").setAttribute("disabled", "disabled");
+                document.getElementById("basicFlatpickrStartHour").value = '00:00';
+                document.getElementById("basicFlatpickrEndHour").value='00:00';
+            }
+            else {
+
+            }
+        }
+
+        async function addMethod() {
+            var leaveType = $("[name='LeaveType']").val();
+            var reason = $("[name='Reason']").val();
+            var timeType = $("[name='TimeType']").val();
+            var startDate = $("[name='StartDate']").val();
+            var endDate = $("[name='EndDate']").val();
+            var rangeType = $("[name='RangeType']").val();
+            var startTime = $("[name='StartTime']").val();
+            var endTime = $("[name='EndTime']").val();
+
+
+            var leaveAddByUserRoute = {
+                'leaveType': leaveType,
+                'reason': reason,
+                'timeType': timeType,
+                'rangeType': rangeType,
+                'startTime': timeType == 0 ? startDate : (rangeType == 0 ? startDate : startDate + startTime),
+                'endTime': timeType == 0 ? endDate : (rangeType == 0 ? startDate : startDate + endTime)
+            };
+            console.log(leaveAddByUserRoute)
+            var response = await ajaxMethod('/Leave/LeaveAddByUserRoute', leaveAddByUserRoute, 'POST', 'Json');
+            if (response?.isSuccess) {
+                successMessageFunc(response);
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            } else {
+                errorMessageFunc(response);
+            }
+        }
+
+    </script>
+
+}
+

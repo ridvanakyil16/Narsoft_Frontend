@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Şirket Oluştur";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Şirket Oluştur</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-validation">
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <label class="col-lg-4 col-form-label" for="logo">
+                                    Logo
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="mb-5 d-flex justify-content-center">
+                                    <div class="container-img mb-5 d-flex justify-content-center position-relative">
+                                        <a href onclick="document.getElementById('upload').click(); return false"
+                                            id="cameraModelOpen" style="width:150px; height: 150px"
+                                            class="btn btn-primary light me-1 rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
+                                            <img src="" style="width:150px; height:150px; object-fit: cover" class="d-none" />
+                                            <i class="fa fa-camera m-0 fs-1"></i>
+                                        </a>
+
+                                        <input id="upload" onchange="imagePreview(event)" type="file" class="d-none" />
+
+                                        <i id="deleteImageButton" onclick="deleteImage()" style="position: absolute; top: 10%; right: 10%; font-size: 25px; cursor: pointer;" class="fa fa-minus-circle text-danger" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label" for="name">
+                                        Ad
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <input name="Name" type="text" class="form-control" id="name" placeholder="Bir Ad girin">
+                                        <div class="invalid-feedback">
+                                            Lütfen bir ad girin.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label" for="CompanyCode">
+                                        Kod
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <input type="text" name="CompanyCode" class="form-control" id="CompanyCode" placeholder="Bir Kod girin">
+                                        <div class="invalid-feedback">
+                                            Lütfen bir Kod girin.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label" for="DepartmentType">
+                                        Birim
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <input type="text" name="DepartmentType" class="form-control" id="DepartmentType" placeholder="Bir Birim girin">
+                                        <div class="invalid-feedback">
+                                            Lütfen bir Birim girin.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col-lg-12 d-flex justify-content-center gap-5">
+                                        <a href="/User/Companies" class="btn btn-danger px-5">Vazgeç</a>
+                                        <button onClick="addMethod()" class="btn btn-primary px-5">Oluştur</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let photoResult;
+
+        async function imagePreview(e) {
+            photoResult = await uploadImage(e.target.files[0])
+            $("#cameraModelOpen i").addClass("d-none");
+            $("#cameraModelOpen img").removeClass("d-none");
+
+            $("#cameraModelOpen img").attr("src", photoResult.data);
+            $("#deleteImageButton").removeClass("d-none");
+            $("#upload").prop("value", "");
+        };
+
+        function deleteImage() {
+            $("#cameraModelOpen i").removeClass("d-none");
+            $("#cameraModelOpen img").addClass("d-none");
+            $("#cameraModelOpen img").attr("src", "");
+            $("#deleteImageButton").addClass("d-none");
+        }
+
+        async function addMethod() {
+            var name = $("[name='Name']").val();
+            var companyCode = $("[name='CompanyCode']").val();
+            var departmentType = $("[name='DepartmentType']").val();
+            var photoName = photoResult?.fileName;
+            var photoString = photoResult?.data;
+
+            var companyAdd = {
+                'name': name,
+                'companyCode': companyCode,
+                'departmentType': departmentType,
+                'logoName': photoName,
+                'logoString': photoString,
+                'createdUserId': '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+            };
+
+            var response = await ajaxMethod('/User/CompanyAdd', companyAdd, 'POST', 'Json');
+            if (response?.isSuccess) {
+                successMessageFunc(response);
+                setTimeout(() => {
+                    location.href = "/User/Companies";
+                }, 2000);
+            } else {
+                errorMessageFunc(response);
+            }
+        }
+
+    </script>
+}

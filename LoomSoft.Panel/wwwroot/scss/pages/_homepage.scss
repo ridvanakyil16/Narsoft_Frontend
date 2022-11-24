@@ -1,0 +1,312 @@
+
+
+//heart Blast Effect
+
+.heart-blast {
+    background-position: -105rem 0!important;
+    transition: background 1s steps(28);
+}
+
+.heart {
+    width   	: 3.75rem;
+    height  	: 3.75rem;
+    display 	: inline-block;
+    background  : url('../images/like.png');
+    cursor      : pointer;
+    margin      : -1.5625rem -0.9375rem;
+}
+.header-left{
+	.search-area{
+		.form-control,
+		.input-group-text{
+			background:#F6F6F6;
+		}
+	}
+}
+.plus-box{
+	background:$secondary;
+    color: #fff;
+    font-size: 0.875rem;
+    padding: 2rem 2rem;
+    overflow: hidden;
+    margin: 0 1.875rem;
+    border-radius: 1.125rem;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
+	position: relative;
+	&:before{
+		position:absolute;
+		content:"";
+		top: 1.2rem;
+		left: 1rem;
+		background-image: url(../images/dots1.png);
+		background-repeat: no-repeat;
+		height: 3rem;
+		width: 3rem;
+	}
+	@include respond ('laptop'){
+		margin:1.25rem 1.25rem;
+	}
+}
+.plus-icon{
+	a{
+		height:3.563rem;
+		width:3.563rem;
+		background:$secondary;
+		display: block;
+		border-radius: 3.563rem;
+		line-height: 3.563rem;
+		margin-left: 2rem;
+		font-size: 1.5rem;
+		text-align: center;
+		color:$white;
+		@include respond('tab-land'){
+			height:2.563rem;
+			width:2.563rem;	
+			line-height: 2.563rem;
+			font-size: 1rem;
+		}
+		@include respond ('phone'){
+			margin-left:0;
+		}
+		
+	}	
+	@include respond ('phone'){
+		display:none;
+	}
+}
+.job-icon{
+	h2{
+		font-size:1.875rem;
+		font-weight:600;
+	}	
+}
+
+.action-buttons .btn {
+    padding: 0;
+    border: 0;
+	margin:0 4px;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+}
+
+.custom-label{
+	min-width:120px;
+	display:inline-block;
+}
+.custom-label-2{
+	min-width:180px;
+	display:inline-block;
+	@include respond ('phone'){
+		min-width:140px;
+	}
+}
+
+.separate-row{
+	&>div{
+		border-bottom:1px solid #eee;
+		&:nth-child(n+3){
+			border-bottom:0;
+		}
+		&:nth-child(odd){
+			border-right:1px solid #eee;
+		}
+		@include respond ('phone'){
+			&:nth-child(n+3){
+				border-bottom:1px solid #eee;
+			}
+			&:nth-child(odd){
+				border-right:0;
+			}
+			&:last-child{
+				border-bottom:0;
+			}
+		}
+	}
+}
+.coin-tabs{
+	background:#F9F9F9;
+	border-radius:1.25rem;
+	.nav-tabs{
+		border:0;
+		.nav-item{
+			.nav-link{
+				border:0;
+				border-radius:1.25rem;
+				font-size: 1rem;
+				padding: 0.5rem 1rem;
+				&.active{
+					background:var(--primary);
+					color:$white;
+				}	
+			}	
+		}
+	}	
+}
+.update-profile{
+	img{
+		height:7rem;
+		width:7rem;
+		border-radius:1.25rem;
+		@include respond('tab-land'){
+			height:5rem;
+			width:5rem;
+		}
+		
+	}	
+}
+.default-progress{
+	height:0.688rem;	
+}
+.bg-green{
+	background:#1D92DF!important;	
+}
+.dashboard-select{
+	border-radius: 3rem;
+    background: var(--rgba-primary-1);
+    border-color: var(--rgba-primary-1);
+    height: 46px;
+	border:0;
+	padding-right:40px;
+    line-height: 44px;
+	color:var(--primary);
+    text-transform: capitalize;	
+	&:after{
+		 border-color: var(--primary);
+	}
+}
+.recent-activity{
+	position:relative;
+	padding-bottom:1rem;
+	
+	&:after{
+		position:absolute;
+		content:"";
+		top:1.188rem;
+		left:0.5rem;
+		width:0.063rem;
+		height:100%;
+		background:#A1A1A1;
+	}
+}
+.jobs{
+	border:1px solid #B1C1C8;	
+	padding: 1.5rem 1.5rem;
+	border-radius:1.25rem;
+	h4{
+		font-size:1.25rem;
+	}
+}
+.default-select.style-1{
+    border-radius: 2rem;
+	line-height: 2rem;
+    background: transparent;	
+	color:var(--primary);
+	font-size:1rem;
+	font-weight:500;
+	&:after{
+		 border-color: var(--primary);
+	}
+}
+//application page
+
+table.dataTable tbody th, table.dataTable tbody td{
+	padding:1.25rem 0.625rem;	
+}
+/* .card-table th:first-child, .card-table td:first-child{
+	padding-left:0;	
+} */
+//companies
+
+
+.job-available{
+	.btn-outline-primary{
+		font-weight:500;	
+	}	
+}
+.Studios-info{
+	margin-right:2rem;	
+	
+	@include respond('desktop'){
+		margin-right:1rem;	
+		svg{
+			width:6rem;
+		}
+	}
+	@include respond ('phone'){
+		margin-bottom:1rem;
+		svg{
+			width:5rem;	
+		}
+	}
+	
+}
+.application{
+	margin-left: 2rem;
+	@include respond ('phone'){
+		margin-left:0.8rem;	
+	}
+}
+.wspace-no{
+	white-space:nowrap;	
+}	
+.application {
+	tr{
+		td{
+			.btn{
+				font-weight:600;	
+			}	
+		}	
+	}	
+}
+.user{
+	img{
+		height:6.25rem;
+		width:6.25rem;
+		border-radius:$radius;
+	}	
+	@include respond ('phone'){
+		img{
+			height:5rem;
+			width:5rem;
+			float:left;
+			margin-right:15px;
+		}
+	}
+}
+
+.recent-activity-wrapper{
+	.recent-activity:last-child{
+		&:after{
+			content:none;
+		}
+	}
+}
+
+.listline-wrapper{
+	display:flex;
+	flex-wrap:wrap;
+	.item:not(:last-child){
+		border-right:1px solid $border-color;
+		margin-right:5px;
+		padding: 2px 0;
+		padding-right:15px;
+	}
+	.item{
+		display:flex;
+		align-items:center;
+		svg{
+			padding-right:8px;
+		}
+		i{
+			color:#a0a0a0;
+			padding-right:8px;
+		}
+	}
+}
+.svg-main-icon g [fill] {
+    fill: #a0a0a0;
+}

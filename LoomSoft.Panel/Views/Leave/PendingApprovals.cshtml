@@ -1,0 +1,105 @@
+﻿@model LoomSoft.Panel.CQRS.Queries.Responses.LeaveGetPendingApprovalQueryResponse
+@{
+    ViewData["Title"] = "Onay Bekleyen İzinler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+    <link href="~/vendor/jquery-smartwizard/dist/css/smart_wizard.min.css" rel="stylesheet">
+}
+
+<style>
+    td{
+        text-align:center
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Onay Bekleyen İzinler</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example3" class="display" style="min-width: 845px">
+                            <thead>
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th>Kullanıcı</th>
+                                    <th>İzin Tarihi</th>
+                                    <th>İzin Nedeni</th>
+                                    <th>İzin Sebebi</th>
+                                    <th>Detay</th>
+                                    <th>Onay/Red</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var leave in Model.Leaves as List<Leave>)
+                                {
+                                    <tr>
+                                        <td><img class="rounded-circle" width="35" src="~/images/profile/small/pic1.jpg" alt=""></td>
+                                        <td name="userName">@leave.UserName</td>
+                                        <td name="startTime">@leave.StartTime</td>
+                                        <td name="leaveType">@leave.LeaveType</td>
+                                        <td name="reason">@leave.Reason</td>
+                                        <td><a href="/Leave/LeaveDetail/@leave.Id" class="btn btn-primary btn-xs">Detaylar</a></td>
+                                        <td class="d-flex justify-content-end align-items-right gap-2">
+                                            <a class="btn btn-success shadow btn-xs" onclick="confirmationOrDenial(this,'@leave.Id',1)">Onay</a>
+                                            <a class="btn btn-danger shadow btn-xs" onclick="confirmationOrDenial(this,'@leave.Id',0)">Red</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        async function confirmationOrDenial(that,id,value) {
+            var userRouteName = $(that).closest('tr').find("[name='userName']").text();
+            var modelContent;
+            $(that).is(':checked') == true ?
+                modelContent = userRouteName + " isimli rotayı AKTİF etmek istediğinize emin misiniz?"
+                : modelContent = userRouteName + " isimli rotayı PASİF etmek istediğinize emin misiniz?";
+            var responseModel = await transactionModalInput(modelContent);
+            var userRouteStatus = {
+                'leaveId': id,
+                'result': 0,
+                'resultNote': responseModel.message
+            };
+            if (responseModel.success)
+            {
+                userRouteStatus.result = value;
+            }
+
+            var response = ajaxMethod('/Leave/ConcludeLeave', userRouteStatus, 'POST', 'Json');
+            if (response?.isSuccess) {
+                successMessageFunc(response);
+            } else {
+                errorMessageFunc(response);
+            }
+        }
+
+        //function deleteUserRoute(that) {
+        //    var userRouteName = $(that).closest('tr').find("[name='name']").text();
+        //    var modelContent = userRouteName + " isimli rotayı SİLMEK istediğinize emin misiniz?"
+        //    var userRouteDelete = {
+        //        'userRouteId': $(that).closest('tr').find("input").attr("id"),
+        //        'status': 99,
+        //        'updatedUserRouteId': $(that).closest('tr').find("input").attr("id")
+        //    };
+        //    deleteMethod(that, modelContent, userRouteDelete, "/Leave/UserRouteChangeStatus");
+        //}
+
+    </script>
+
+}

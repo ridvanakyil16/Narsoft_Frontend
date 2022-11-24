@@ -1,0 +1,125 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Profilim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Profilim</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-validation">
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <img id="imgElem" src="data:image/jpg;base64,@Model.UserPhotos[0].PhotoString" class="center">
+                            </div>
+
+
+                            <div class="col-xl-6">
+                                <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label" for="user">
+                                        <b>Sicil No</b>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <p>@Model.RegistrationNumber</p>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label" for="user">
+                                        <b>Ad Soyad</b>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <p>@Model.Name @Model.Surname</p>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label" for="user">
+                                        <b>Telefon</b>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <p>@Model.PhoneNumber</p>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label" for="user">
+                                        <b>Mail Adresi</b>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <p>@Model.MailAddress</p>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label" for="user">
+                                        <b>Adres</b>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <p>@Model.Address</p>
+                                    </div>
+                                </div>
+
+                                <label class="col-lg-4 col-form-label" style="color:darkred; font-weight:bold">
+                                    Şifre Güncelle
+                                </label>
+                                <form>
+                                    <div class="mb-3 row col-lg-8">
+                                        <div class="col-lg-12 d-flex justify-content-center gap-5">
+                                            <input type="password" name="Password" class="form-control" id="Password" placeholder="Yeni Şifre" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row col-lg-8">
+                                        <div class="col-lg-12 d-flex justify-content-center gap-5">
+                                            <input type="password" name="Password2" class="form-control" id="Password2" placeholder="Yeni Şifre Tekrar" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col-lg-12 d-flex justify-content-center gap-5">
+                                            <button type="submit" id="ChangePassword" class="btn btn-primary px-5">Güncelle</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#ChangePassword").click(function (event) {
+            event.preventDefault();
+            //url, data, type, dataType
+            var request = {
+                Password: $('#Password').val(),
+                Password2: $('#Password2').val(),
+            };
+            console.log(request)
+            var url = '/User/PasswordChange';
+            var type = 'POST';
+            var dataType = 'json';
+            ajaxMethod(url, request, type, dataType, successMessageFunc, errorMessageFunc);
+
+            var firstPasswordInput = document.getElementById('Password');
+            firstPasswordInput.value = '';
+            var secondPasswordInput = document.getElementById('Password2');
+            secondPasswordInput.value = '';
+
+        });
+
+    </script>
+    }

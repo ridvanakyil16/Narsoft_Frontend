@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Rol Oluştur";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Rol Oluştur</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-validation">
+                        <form asp-controller="User" asp-action="RoleAdd" method="post" class="needs-validation">
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="name">
+                                            Ad
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input name="name" type="text" class="form-control" id="name" placeholder="Bir Ad girin">
+                                            <div class="invalid-feedback">
+                                                Lütfen bir ad girin.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="Code">
+                                            Açıklama
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="text" name="Note" class="form-control" id="Code" placeholder="Bir açıklama girin">
+                                            <div class="invalid-feedback">
+                                                Lütfen bir açıklama girin.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col-lg-12 d-flex justify-content-center gap-5">
+                                            <a href="/User/Roles" class="btn btn-danger px-5">Vazgeç</a>
+                                            <button type="submit" class="btn btn-primary px-5">Oluştur</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,229 @@
+﻿@{
+    ViewData["Title"] = "Kullanıcı Rota Ayarları";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<style>
+    .infobox {
+        border: 0.0625rem solid #7d7dba82;
+        /* padding: 0.3125rem 1.25rem; */
+        border-radius: 1rem;
+    }
+</style>*@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Kullanıcı Rota Ayarları</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-validation mb-4" id="approved-list">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="mb-3 row">
+                                    <label class="col-lg-3 col-form-label" for="user">
+                                        Kullanıcı
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select id="userId" class="default-select wide form-control">
+                                            <option selected="selected" value="-1">Lütfen Kullanıcı Seçin..</option>
+
+                                            @foreach (var user in ViewBag.Users)
+                                            {
+                                                <option value="@user.Id">@(user.Name + " " + user.Surname)</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-5 row">
+                                    <label class="col-lg-3 col-form-label" for="ad">
+                                        Rota Tipi
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select id="routeType" class="default-select wide form-control">
+                                            <option selected="selected" value="-1">Lütfen Rota Tipi Seçin..</option>
+
+                                            <option value="0">İzin</option>
+                                            <option value="1">Mesai</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="mb-3 row">
+                            <div class="col-xl-6 row">
+                                <label class="col-lg-4 col-form-label">
+                                    1.Onay
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-lg-6">
+                                    <select id="1approvalUserId" class="default-select wide form-control">
+                                        <option selected="selected" value="-1">Lütfen Kullanıcı Seçin..</option>
+
+                                        @foreach (var user in ViewBag.Users)
+                                        {
+                                            <option value="@user.Id">@(user.Name + " " + user.Surname)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 row">
+                                <label class="col-lg-4 col-form-label">
+                                    1.Bilgilendirme Maili
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-lg-6">
+                                    <select id="1infoUserId" class="default-select wide form-control">
+                                        <option selected="selected" value="-1">Lütfen Kullanıcı Seçin..</option>
+
+                                        @foreach (var user in ViewBag.Users)
+                                        {
+                                            <option value="@user.Id">@(user.Name + " " + user.Surname)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>*@
+
+                    </div>
+                     <div class="mb-3 row">
+                            <div class="col-lg-12 d-flex justify-content-end gap-5">
+                                <a href="/Leave/UserRouteSettings" class="btn btn-danger px-5">Vazgeç</a>
+                                <button id="createBtn" type="submit" class="btn btn-primary px-5">Oluştur</button>
+                            </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        jQuery(window).on('load', function () {
+            createElement(1);
+        });
+
+        function createElement(number) {
+            $("#approved-list").children().append(`
+                        <div class='mb-3 row'>
+                            <div class="col-5">
+                                <div class="row">
+                                    <label class="col-lg-5 col-form-label" for="onay${number}">
+                                        ${number}.Onay
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-7">
+                                            <select id="onay${number}" class="default-select wide form-control">
+                                            <option selected="selected" value="-1">Lütfen Kullanıcı Seçin..</option>
+    @foreach (var user in ViewBag.Users as List<User>)
+    {
+                                                    <option value="@user.Id">@(user.Name + " " + user.Surname)</option>
+    }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="row">
+                                    <label class="col-lg-6 col-form-label text-center" for="bilgilendirmeMaili${number}">
+                                        ${number}.Bilgilendirme Maili
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                            <select id="bilgilendirmeMaili${number}" class="default-select wide form-control">
+                                            <option selected="selected" value="-1">Lütfen Kullanıcı Seçin..</option>
+                                            @foreach (var user in ViewBag.Users as List<User>)
+                                            {
+                                                <option value="@user.Id">@(user.Name + " " + user.Surname)</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-1 d-flex justify-content-center align-items-center'>
+                                <button onclick='addComponent(this.closest(".row"))' class='add-btn badge badge-xl badge-primary fs-3'>+</button>
+                                <button onclick='deleteComponent(this.closest(".row"))' class='delete-btn badge badge-xl badge-danger fs-3 d-none'>-</button>
+                            </div>
+                        </div>`
+            )
+        }
+
+        function changeButtons() {
+            $(".add-btn").remove()
+            $(".delete-btn").removeClass("d-none")
+        }
+
+        let userRouteList = [];
+        console.log(userRouteList,"hey merhaba")
+
+        async function addComponent(that) {
+            let toastrOptions = {
+                'location': "top-end",
+                'type': "",
+                'content': "",
+            };
+            const userRoute = {
+                name: $(that).find("#onay" + (userRouteList.length + 1) + " option:selected").text(),
+                approverId: $(that).find("#onay" + (userRouteList.length + 1)).val(),
+                approverName: $(that).find("#onay" + (userRouteList.length + 1) + " option:selected").text(),
+                informedId: $(that).find("#bilgilendirmeMaili" + (userRouteList.length + 1)).val(),
+                informedName: $(that).find("#bilgilendirmeMaili" + (userRouteList.length + 1) + " option:selected").text(),
+                stepIndex: userRouteList.length + 1
+            };
+            if (userRoute.approverId == -1 || userRoute.informedId == -1) {
+                toastrOptions.type = "error";
+                toastrOptions.content = "Lütfen tüm alanları doldurun..";
+                alertBox(toastrOptions);
+            } else {
+                userRouteList.push(userRoute);
+                changeButtons();
+                createElement(userRouteList.length + 1);
+            }
+        }
+
+        async function deleteComponent(that) {
+            var result = await transactionModal("Bu ürün bileşenini silmek istediğinizden emin misiniz?");
+            if (result.isConfirmed) {
+                $(that).remove();
+            }
+        }
+
+
+        $("#createBtn").click(function (event) {
+            event.preventDefault();
+
+            var name = $('#userId option:selected').text();
+            var userId = $('#userId option:selected').val();
+            var userName = $('#userId option:selected').text();
+            var routeType = $('#routeType option:selected').val();
+
+            var userRouteAdd = {
+                'name': name,
+                'userId': userId,
+                'userName': userName,
+                'routeType': routeType,
+                'userRouteSteps': userRouteList
+            };
+
+            var response = ajaxMethod('/Leave/AddUserRoute', userRouteAdd, 'POST', 'Json');
+            if (response?.isSuccess) {
+                successMessageFunc(response);
+                setTimeout(() => {
+                    location.href = "/Leave/UserRouteSettings";
+                }, 2000);
+            } else {
+                errorMessageFunc(response);
+            }
+        });
+
+    </script>
+}

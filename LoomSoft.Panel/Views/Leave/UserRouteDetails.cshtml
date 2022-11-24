@@ -1,0 +1,99 @@
+﻿@model LoomSoft.Panel.CQRS.Queries.Responses.UserRouteGetByIdQueryResponse
+@{
+    ViewData["Title"] = "UserRouteDetails";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Kullanıcı Rota Detayı</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-validation">
+                        <form class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="adi">
+                                            Kullanıcı Adı
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="text" readonly id="adi" class="form-control-plaintext" value="@Model.UserRouteData.UserName">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-lg-4 col-form-label" for="ad">
+                                            Rota Tipi
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="text" readonly id="ad" class="form-control-plaintext" value="@(Model.UserRouteData.RouteType == 0 ? "İzin" : "Mesai")">
+                                        </div>
+                                    </div>  
+                                </div>
+                                @{int i = 0;}
+                                @foreach (var userStep in Model.UserRouteData.UserRouteSteps as List<UserRouteStep>)
+                                {
+                                    i++;
+
+                                    <div class='mb-3 row'>
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <label class="col-lg-5 col-form-label" for="onay@(i)">
+                                                    @(i).Onay
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-7">
+                                                    <input type="text" readonly id="onay@(i)" class="form-control-plaintext" value="@userStep.ApproverName">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <label class="col-lg-6 col-form-label text-center" for="bilgilendirmeMaili@(i)">
+                                                    @(i).Bilgilendirme Maili
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input type="text" readonly id="bilgilendirmeMaili@(i)" class="form-control-plaintext" value="@userStep.InformedName">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    @*<div class="col-xl-6">
+                                        <div class="mb-3 row">
+                                            <label class="col-lg-4 col-form-label" for="onay">
+                                                @(i).Onay
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input type="text" readonly id="onay@(i)" class="form-control-plaintext" value="@userStep.ApproverName">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-lg-4 col-form-label" for="bilgilendirmeMaili@(i)">
+                                                @(i).Bilgilendirme Maili
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input type="text" readonly id="bilgilendirmeMaili@(i)" class="form-control-plaintext" value="@userStep.InformedName">
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                }
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
