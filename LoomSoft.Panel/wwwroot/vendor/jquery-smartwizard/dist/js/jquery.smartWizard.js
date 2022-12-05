@@ -271,6 +271,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           _this._showNext();
         }); // Previous button event
 
+        this.main.find('.nav-wizard .nav-link').on("click", function (e) {
+            e.preventDefault();
+            var number = Number(e.currentTarget.text);
+            var oldNumber = 1;
+            if (number > oldNumber) {
+                _this._showNext();
+            } else if (number < oldNumber) {
+                _this._showPrevious();
+            }
+            oldNumber = number;
+        }); // Previous button event   
+
         this.main.find('.sw-btn-prev').on("click", function (e) {
           e.preventDefault();
 

@@ -114,6 +114,7 @@ namespace LoomSoft.Panel.Controllers
             Guid userId = Guid.Parse(identity.FindFirst(ClaimTypes.PrimarySid).Value.ToString());
             LeaveGetByIdQueryRequest request = new LeaveGetByIdQueryRequest() { LeaveId = id, UserId = userId };
             var response = _mediator.Send(request).Result.Data;
+            ViewBag.UserId = userId;
             return View(_mediator.Send(request).Result.Data);
         }
 
